@@ -1,0 +1,4 @@
+module CSQLite {
+    umbrella "/Users/Harley/Works/Projects/神笔马良/Projects/Server/.build/checkouts/sqlite.git--8232814251736334455/Sources/CSQLite/include"
+    export *
+}
