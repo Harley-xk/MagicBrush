@@ -1,4 +1,4 @@
 module CNIOSHA1 {
-    umbrella "/Users/Harley/Works/Projects/神笔马良/Projects/Server/.build/checkouts/swift-nio.git-3108475404973543938/Sources/CNIOSHA1/include"
+    umbrella "/Users/Harley/Works/Projects/神笔马良/MagicBrush/Server/.build/checkouts/swift-nio.git-3108475404973543938/Sources/CNIOSHA1/include"
     export *
 }

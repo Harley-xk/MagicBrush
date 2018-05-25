@@ -10,7 +10,12 @@ import FluentMySQL
 
 func makeMigrations(_ migrations: inout MigrationConfig) {
     
-    /// Currently Todo Only
+    migrations.add(model: User.self, database: .mysql)
+    migrations.add(model: SocialAccount.self, database: .mysql)
+    migrations.add(model: UserActionRecord.self, database: .mysql)
+    migrations.add(model: UserDevice.self, database: .mysql)
+    
+//    /// Currently Todo Only
     migrations.add(model: Todo.self, database: .mysql)
 
     
