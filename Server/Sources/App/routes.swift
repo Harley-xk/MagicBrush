@@ -6,6 +6,12 @@ public func routes(_ router: Router) throws {
     router.get("hello") { req in
         return "Hello, world!"
     }
+    
+    router.group(DeviceInfoMiddleware()) { (router) in
+        let sms = SMSController()
+        router.post("sms/captcha", use: sms.postCaptcha)
+    }
+    
 
     // Example of configuring a controller
     let todoController = TodoController()

@@ -1,5 +1,5 @@
 //
-//  UserActionRecord.swift
+//  UserAction.swift
 //  App
 //
 //  Created by Harley.xk on 2018/5/25.
@@ -9,7 +9,7 @@ import Vapor
 import FluentMySQL
 
 /// 记录用户操作行为的日志表，只记录重要行为
-final class UserActionRecord: MySQLModel {
+final class UserAction: MySQLModel {
     
     var id: Int?
     
@@ -37,17 +37,18 @@ final class UserActionRecord: MySQLModel {
     }
 }
 
-extension UserActionRecord: Migration {}
-extension UserActionRecord: Content {}
+extension UserAction: Migration {}
+extension UserAction: Content {}
 
-extension UserActionRecord {
+extension UserAction {
     
     enum ActionType: String, MySQLEnumType {
-        static func reflectDecoded() throws -> (UserActionRecord.ActionType, UserActionRecord.ActionType) {
+        static func reflectDecoded() throws -> (ActionType, ActionType) {
             return (.register, .login)
         }
         
-        case register
-        case login
+        case register  // 注册
+        case login     // 登录
+        case captcha   // 请求验证码
     }
 }

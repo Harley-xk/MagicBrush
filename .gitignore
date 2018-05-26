@@ -1,2 +1,4 @@
 Server/.build/*
 xcuserdata
+/Server/.idea
+/Server/API

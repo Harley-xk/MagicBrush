@@ -23,9 +23,16 @@
 /* Begin PBXBuildFile section */
 		B613FF7820B7F5E500FF0C1F /* SocialAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = B613FF7720B7F5E500FF0C1F /* SocialAccount.swift */; };
 		B613FF7A20B7F93800FF0C1F /* UserDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = B613FF7920B7F93800FF0C1F /* UserDevice.swift */; };
+		B613FF7C20B803F200FF0C1F /* SMSController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B613FF7B20B803F200FF0C1F /* SMSController.swift */; };
+		B613FF7F20B805FE00FF0C1F /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = B613FF7E20B805FE00FF0C1F /* Utils.swift */; };
+		B613FF8220B94A8D00FF0C1F /* SMSResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = B613FF8120B94A8D00FF0C1F /* SMSResult.swift */; };
+		B613FF8420B9633000FF0C1F /* CaptchaBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = B613FF8320B9633000FF0C1F /* CaptchaBody.swift */; };
+		B613FF8620B9636400FF0C1F /* CaptchaRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = B613FF8520B9636400FF0C1F /* CaptchaRecord.swift */; };
 		B62C6D7D20B7A1CD00D570F3 /* Todo.swift in Sources */ = {isa = PBXBuildFile; fileRef = B62C6D7C20B7A1CD00D570F3 /* Todo.swift */; };
 		B62C6D8020B7A40D00D570F3 /* RegisterController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B62C6D7F20B7A40D00D570F3 /* RegisterController.swift */; };
-		B62C6D8320B7A42F00D570F3 /* UserActionRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = B62C6D8220B7A42F00D570F3 /* UserActionRecord.swift */; };
+		B62C6D8320B7A42F00D570F3 /* UserAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = B62C6D8220B7A42F00D570F3 /* UserAction.swift */; };
+		B6D22B1920B99DC900788DD0 /* DeviceInfoMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6D22B1820B99DC900788DD0 /* DeviceInfoMiddleware.swift */; };
+		B6D22B1B20B9C03000788DD0 /* CustomValidators.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6D22B1A20B9C02F00788DD0 /* CustomValidators.swift */; };
 		B6F1FF2B20B6F1B400950CAC /* Migration.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6F1FF2A20B6F1B400950CAC /* Migration.swift */; };
 		OBJ_1032 /* AppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_23 /* AppTests.swift */; };
 		OBJ_1034 /* App.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "MaLiang-Server::App::Product" /* App.framework */; };
@@ -4927,9 +4934,16 @@
 /* Begin PBXFileReference section */
 		B613FF7720B7F5E500FF0C1F /* SocialAccount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocialAccount.swift; sourceTree = "<group>"; };
 		B613FF7920B7F93800FF0C1F /* UserDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDevice.swift; sourceTree = "<group>"; };
+		B613FF7B20B803F200FF0C1F /* SMSController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SMSController.swift; sourceTree = "<group>"; };
+		B613FF7E20B805FE00FF0C1F /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
+		B613FF8120B94A8D00FF0C1F /* SMSResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SMSResult.swift; sourceTree = "<group>"; };
+		B613FF8320B9633000FF0C1F /* CaptchaBody.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptchaBody.swift; sourceTree = "<group>"; };
+		B613FF8520B9636400FF0C1F /* CaptchaRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptchaRecord.swift; sourceTree = "<group>"; };
 		B62C6D7C20B7A1CD00D570F3 /* Todo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Todo.swift; sourceTree = "<group>"; };
 		B62C6D7F20B7A40D00D570F3 /* RegisterController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterController.swift; sourceTree = "<group>"; };
-		B62C6D8220B7A42F00D570F3 /* UserActionRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserActionRecord.swift; sourceTree = "<group>"; };
+		B62C6D8220B7A42F00D570F3 /* UserAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAction.swift; sourceTree = "<group>"; };
+		B6D22B1820B99DC900788DD0 /* DeviceInfoMiddleware.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceInfoMiddleware.swift; sourceTree = "<group>"; };
+		B6D22B1A20B9C02F00788DD0 /* CustomValidators.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomValidators.swift; sourceTree = "<group>"; };
 		B6F1FF2A20B6F1B400950CAC /* Migration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Migration.swift; sourceTree = "<group>"; };
 		"Console::Command::Product" /* Command.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Command.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		"Console::Console::Product" /* Console.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Console.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -6474,6 +6488,24 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		B613FF8020B94A7900FF0C1F /* SMS */ = {
+			isa = PBXGroup;
+			children = (
+				B613FF7B20B803F200FF0C1F /* SMSController.swift */,
+			);
+			path = SMS;
+			sourceTree = "<group>";
+		};
+		B613FF8720B965C800FF0C1F /* SMS */ = {
+			isa = PBXGroup;
+			children = (
+				B613FF8120B94A8D00FF0C1F /* SMSResult.swift */,
+				B613FF8320B9633000FF0C1F /* CaptchaBody.swift */,
+				B613FF8520B9636400FF0C1F /* CaptchaRecord.swift */,
+			);
+			path = SMS;
+			sourceTree = "<group>";
+		};
 		B62C6D7E20B7A3EA00D570F3 /* Auth */ = {
 			isa = PBXGroup;
 			children = (
@@ -6487,10 +6519,18 @@
 			children = (
 				OBJ_14 /* User.swift */,
 				B613FF7720B7F5E500FF0C1F /* SocialAccount.swift */,
-				B62C6D8220B7A42F00D570F3 /* UserActionRecord.swift */,
+				B62C6D8220B7A42F00D570F3 /* UserAction.swift */,
 				B613FF7920B7F93800FF0C1F /* UserDevice.swift */,
 			);
 			path = User;
+			sourceTree = "<group>";
+		};
+		B6D22B1720B99DB100788DD0 /* Middlewares */ = {
+			isa = PBXGroup;
+			children = (
+				B6D22B1820B99DC900788DD0 /* DeviceInfoMiddleware.swift */,
+			);
+			path = Middlewares;
 			sourceTree = "<group>";
 		};
 		B6F1FF2920B6F19F00950CAC /* DataBase */ = {
@@ -6517,6 +6557,7 @@
 		OBJ_11 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				B613FF8720B965C800FF0C1F /* SMS */,
 				B62C6D8120B7A41A00D570F3 /* User */,
 				B62C6D7C20B7A1CD00D570F3 /* Todo.swift */,
 			);
@@ -8534,6 +8575,9 @@
 		OBJ_8 /* App */ = {
 			isa = PBXGroup;
 			children = (
+				B613FF7E20B805FE00FF0C1F /* Utils.swift */,
+				B6D22B1A20B9C02F00788DD0 /* CustomValidators.swift */,
+				B6D22B1720B99DB100788DD0 /* Middlewares */,
 				OBJ_9 /* Controllers */,
 				OBJ_11 /* Models */,
 				B6F1FF2920B6F19F00950CAC /* DataBase */,
@@ -8682,6 +8726,7 @@
 		OBJ_9 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				B613FF8020B94A7900FF0C1F /* SMS */,
 				B62C6D7E20B7A3EA00D570F3 /* Auth */,
 				OBJ_10 /* TodoController.swift */,
 			);
@@ -11423,16 +11468,23 @@
 			buildActionMask = 0;
 			files = (
 				OBJ_895 /* TodoController.swift in Sources */,
-				B62C6D8320B7A42F00D570F3 /* UserActionRecord.swift in Sources */,
+				B613FF7F20B805FE00FF0C1F /* Utils.swift in Sources */,
+				B62C6D8320B7A42F00D570F3 /* UserAction.swift in Sources */,
 				B613FF7A20B7F93800FF0C1F /* UserDevice.swift in Sources */,
+				B613FF7C20B803F200FF0C1F /* SMSController.swift in Sources */,
+				B6D22B1B20B9C03000788DD0 /* CustomValidators.swift in Sources */,
+				B613FF8220B94A8D00FF0C1F /* SMSResult.swift in Sources */,
 				OBJ_898 /* User.swift in Sources */,
 				OBJ_899 /* app.swift in Sources */,
 				B62C6D7D20B7A1CD00D570F3 /* Todo.swift in Sources */,
 				B613FF7820B7F5E500FF0C1F /* SocialAccount.swift in Sources */,
 				OBJ_900 /* boot.swift in Sources */,
+				B613FF8620B9636400FF0C1F /* CaptchaRecord.swift in Sources */,
 				OBJ_901 /* configure.swift in Sources */,
 				OBJ_902 /* routes.swift in Sources */,
 				B6F1FF2B20B6F1B400950CAC /* Migration.swift in Sources */,
+				B6D22B1920B99DC900788DD0 /* DeviceInfoMiddleware.swift in Sources */,
+				B613FF8420B9633000FF0C1F /* CaptchaBody.swift in Sources */,
 				B62C6D8020B7A40D00D570F3 /* RegisterController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
