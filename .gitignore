@@ -2,3 +2,4 @@ Server/.build/*
 xcuserdata
 /Server/.idea
 /Server/API
+/Server/Sources/App/configure.swift
