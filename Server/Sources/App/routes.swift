@@ -10,6 +10,9 @@ public func routes(_ router: Router) throws {
     router.group(DeviceInfoMiddleware()) { (router) in
         let sms = SMSController()
         router.post("sms/captcha", use: sms.postCaptcha)
+        
+        let register = RegisterController()
+        router.post("auth/mobile-register", use: register.phoneRegister)
     }
     
 
