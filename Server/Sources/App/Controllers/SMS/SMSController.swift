@@ -54,7 +54,6 @@ class SMSController {
     
     //向指定手机号发送短信验证码
     func sendCaptcha(to phone: String, on req: Request) throws -> Future<SMSResult> {
-        
         let random = String.random()
         let captcha = GenerateCaptcha()
         return try req.client().post("https://yun.tim.qq.com/v5/tlssmssvr/sendsms?sdkappid=\(Tencent_SMS_App_ID)&random=\(random)", headers: HTTPHeaders(), beforeSend: { (req) in
@@ -74,4 +73,25 @@ class SMSController {
             return result
         })
     }
+    
+    /// 校验手机号和验证码是否有效
+    func verifyCaptcha(_ captcha: String, with phone: String, on request: Request) -> Future<Bool> {
+        // 查询是否已经存在刚发送的验证码
+        return request.withNewConnection(to: .mysql) { (connection) -> EventLoopFuture<[CaptchaRecord]> in
+            return try connection.query(CaptchaRecord.self).group(.and, closure: { (builder) in
+                try builder.filter(\.phone == phone)
+                try builder.filter(\.code == captcha)
+            }).all()
+        }.map { (records) -> (Bool) in
+            for record in records {
+                if record.expireTime > Date() {
+                    /// 校验通过，删除验证码
+                    _ = record.delete(on: request)
+                    return true
+                }
+            }
+            return false
+        }
+    }
+    
 }
