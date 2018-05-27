@@ -6541,6 +6541,15 @@
 			path = DataBase;
 			sourceTree = "<group>";
 		};
+		B6FEE47120BA47D600B17018 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				B613FF7E20B805FE00FF0C1F /* Utils.swift */,
+				B6D22B1A20B9C02F00788DD0 /* CustomValidators.swift */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
 		OBJ_103 /* Migration */ = {
 			isa = PBXGroup;
 			children = (
@@ -8575,12 +8584,11 @@
 		OBJ_8 /* App */ = {
 			isa = PBXGroup;
 			children = (
-				B613FF7E20B805FE00FF0C1F /* Utils.swift */,
-				B6D22B1A20B9C02F00788DD0 /* CustomValidators.swift */,
-				B6D22B1720B99DB100788DD0 /* Middlewares */,
 				OBJ_9 /* Controllers */,
 				OBJ_11 /* Models */,
+				B6D22B1720B99DB100788DD0 /* Middlewares */,
 				B6F1FF2920B6F19F00950CAC /* DataBase */,
+				B6FEE47120BA47D600B17018 /* Utils */,
 				OBJ_15 /* app.swift */,
 				OBJ_16 /* boot.swift */,
 				OBJ_17 /* configure.swift */,

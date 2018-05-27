@@ -10,7 +10,7 @@ import Foundation
 import Validation
 
 extension Validator where T == String {
-    /// Validates whether a `String` is a valid email address.
+    /// Validates whether a `String` is a valid Chinese phone address.
     ///
     ///     try validations.add(\.email, .email)
     ///

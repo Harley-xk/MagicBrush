@@ -20,12 +20,17 @@ extension Encodable {
 ///
 /// - Parameter length: 验证码长度，第一位保证不为 0
 public func GenerateCaptcha(length: Int = 6) -> String {
-    let s = powf(10, Float(length))
-    var result = arc4random() % UInt32(s)
-    if result < 100000 {
-        result += 100000
+    var captcha = ""
+    for index in 0 ..< length {
+        let random = RandomNumber(min: (index == 0 ? 1 : 0), max: 9)
+        captcha.append("\(random)")
     }
-    return "\(result)"
+    return captcha
+}
+
+public func RandomNumber(min: Int = 0, max: Int = 9) -> Int {
+    let source = Array(min...max)
+    return source.random ?? min
 }
 
 extension String {
