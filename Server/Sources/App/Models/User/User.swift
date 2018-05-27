@@ -7,6 +7,7 @@
 
 import Vapor
 import FluentMySQL
+import Crypto
 
 /// 用户表
 final class User: MySQLModel {
@@ -42,23 +43,23 @@ final class User: MySQLModel {
     var status: Status = .pending
     
     /// 通过手机号创建用户，需要先验证手机号
-    convenience init(phone: String, nickname: String, password: String) {
-        self.init(nickname: nickname, password: password, registerChannel: .phone)
+    convenience init(phone: String, nickname: String, password: String) throws {
+        try self.init(nickname: nickname, password: password, registerChannel: .phone)
         self.phone = phone
         self.registerChannel = .phone
         self.status = .active
     }
     
     /// 通过邮箱创建用户
-    convenience init(email: String, nickname: String, password: String) {
-        self.init(nickname: nickname, password: password, registerChannel: .email)
+    convenience init(email: String, nickname: String, password: String) throws {
+        try self.init(nickname: nickname, password: password, registerChannel: .email)
         self.email = email
         self.registerChannel = .email
     }
 
-    private init(nickname nk: String, password pwd: String, registerChannel channel: RegisterChannel) {
+    private init(nickname nk: String, password pwd: String, registerChannel channel: RegisterChannel) throws {
         nickname = nk
-        password = pwd
+        password = try SHA256.hash(pwd).hexEncodedString()
         registerChannel = channel
     }
 }
