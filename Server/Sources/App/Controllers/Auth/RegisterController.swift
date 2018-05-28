@@ -60,35 +60,6 @@ class RegisterController {
             }).map({ (user) -> (UserResp) in
                 return UserResp(from: user)
             })
-        })
-        
-        return try request.content.decode(PhoneRegisterRequest.self).flatMap({ (data) -> Future<UserResp> in
-            try data.validate()
-            return SMSController().verifyCaptcha(data.captcha, with: data.phone, on: request).flatMap({ (passed) -> EventLoopFuture<MySQLConnection> in
-                if !passed {
-                    throw Abort(.badRequest, reason: "验证码不正确。")
-                }
-                return request.newConnection(to: .mysql)
-            }).flatMap({ (connection) -> EventLoopFuture<[User]> in
-                return try connection.query(User.self).filter(\.phone == data.phone).all()
-            }).flatMap({ (users) -> EventLoopFuture<User> in
-                if users.count > 0 {
-                    throw Abort(.conflict, reason: "该手机号已注册。")
-                } else {
-                    let user = try User(phone: data.phone, nickname: data.nickname, password: data.password)
-                    return user.save(on: request)
-                }
-            }).flatMap({ (user) -> EventLoopFuture<User> in
-                guard let device = request.device else {
-                    throw Abort(.badRequest, reason: "Missing device info.")
-                }
-                return device.save(on: request).flatMap({ (device) -> EventLoopFuture<UserAction> in
-                    let action = UserAction(userId: user.id ?? 0, actionType: .register, device: device, remark: "通过手机号`\(data.phone)`注册")
-                    return action.save(on: request)
-                }).transform(to: user)
-            }).map({ (user) -> (UserResp) in
-                return UserResp(from: user)
-            })
-        })
+        })        
     }
 }
