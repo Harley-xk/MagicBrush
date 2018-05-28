@@ -7,6 +7,7 @@
 
 import Vapor
 import Service
+import FluentMySQL
 
 extension Request {
     var device: UserDevice? {
@@ -15,9 +16,34 @@ extension Request {
             let system = http.headers["x-device-system"].first,
             let model = http.headers["x-device-model"].first
         {
-            return UserDevice(id: -1, uuid: uuid, name: name, system: system, model: model)
+            return UserDevice(id: nil, uuid: uuid, name: name, system: system, model: model)
         }
         return nil
+    }
+    
+    func decode<D>(_ content: D.Type, maxSize: Int = 65_536, withDevice: Bool = true) throws -> Future<(D, UserDevice)> where D: Decodable {
+        var device = self.device
+        if withDevice && device == nil {
+            throw Abort(.badRequest, reason: "Missing device info.")
+        }
+        
+        return newConnection(to: .mysql).flatMap({ (db) -> EventLoopFuture<[UserDevice]> in
+            // 查询设备信息
+            try db.query(UserDevice.self).filter(\.uuid == device?.uuid).all()
+        }).flatMap { (devices) -> EventLoopFuture<UserDevice> in
+            if devices.count <= 0 {
+                // 保存设备信息
+                return device!.save(on: self)
+            } else {
+                // 更新已存在的设备信息
+                device!.id = devices.first!.id
+                return device!.update(on: self)
+            }
+            }.flatMap { (device) -> EventLoopFuture<(D, UserDevice)> in
+                return try self.content.decode(D.self).map({ (d) -> (D, UserDevice) in
+                    return (d, device)
+                })
+        }
     }
 }
 

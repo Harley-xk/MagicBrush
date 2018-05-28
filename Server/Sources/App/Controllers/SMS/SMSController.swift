@@ -23,7 +23,8 @@ class SMSController {
      *     HTTP/1.1 200 OK
      */
     func postCaptcha(_ req: Request) throws -> Future<HTTPStatus> {
-        return try req.content.decode(CaptchaRequest.self).flatMap({ (data) -> EventLoopFuture<HTTPStatus> in
+        
+        return try req.decode(CaptchaRequest.self).flatMap({ (data, device) -> Future<HTTPStatus> in
             try data.validate()
             let phone = data.phone
             // 查询是否已经存在刚发送的验证码
