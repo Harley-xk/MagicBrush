@@ -36,9 +36,9 @@ struct CaptchaBody: Content {
     init(phone: String, nation: String = "86", captcha: String, random: String) throws {
         params = [captcha, "10"]
         let sigResource = "appkey=\(Tencent_SMS_App_Secret)&random=\(random)&time=\(time)&mobile=\(phone)"
-        print("smsRes: \(sigResource)")
+//        print("smsRes: \(sigResource)")
         sig = try SHA256.hash(sigResource).hexEncodedString()
-        print("smsSig: \(sig)")
+//        print("smsSig: \(sig)")
         tel = Tel(mobile: phone, nationcode: nation)
     }
 }

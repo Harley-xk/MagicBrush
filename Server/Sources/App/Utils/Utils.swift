@@ -8,12 +8,11 @@
 import Foundation
 import Vapor
 import Random
+import Crypto
 
-extension Encodable {
-    public func encodeToJsonBody(use encoder: JSONEncoder = JSONEncoder()) throws -> HTTPBody {
-        let data = try encoder.encode(self)
-        return HTTPBody(data: data)
-    }
+/// 加密用户密码
+public func hashedPassword(_ pass: String) throws -> String {
+    return try SHA256.hash(pass).hexEncodedString()
 }
 
 /// 生成指定位数的验证码

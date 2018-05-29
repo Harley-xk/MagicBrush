@@ -21,7 +21,7 @@ extension Request {
         return nil
     }
     
-    func decode<D>(_ content: D.Type, maxSize: Int = 65_536, withDevice: Bool = true) throws -> Future<(D, UserDevice)> where D: Decodable {
+    func decode<D>(_ content: D.Type, maxSize: Int = 65_536, withDevice: Bool = true) throws -> Future<RequestData<D>> where D: Decodable {
         var device = self.device
         if withDevice && device == nil {
             throw Abort(.badRequest, reason: "Missing device info.")
@@ -39,9 +39,9 @@ extension Request {
                 device!.id = devices.first!.id
                 return device!.update(on: self)
             }
-            }.flatMap { (device) -> EventLoopFuture<(D, UserDevice)> in
-                return try self.content.decode(D.self).map({ (d) -> (D, UserDevice) in
-                    return (d, device)
+            }.flatMap { (device) -> EventLoopFuture<RequestData<D>> in
+                return try self.content.decode(D.self).map({ (d) -> RequestData<D> in
+                    return RequestData(data: d, device: device)
                 })
         }
     }

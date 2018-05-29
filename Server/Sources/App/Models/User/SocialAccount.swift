@@ -10,7 +10,14 @@ import FluentMySQL
 
 
 /// 用户绑定的社交账号表
-struct SocialAccount: MySQLModel {
+struct SocialAccount: MySQLModel, SoftDeletable {
+    
+    static var deletedAtKey: WritableKeyPath<SocialAccount, Date?> {
+        return \.deletedAt
+    }
+    
+    /// 软删除时间戳
+    var deletedAt: Date?
     
     /// 账号 id
     var id: Int?

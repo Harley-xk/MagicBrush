@@ -8,7 +8,7 @@
 import Vapor
 import FluentMySQL
 
-struct PhoneRegisterRequest: Codable, Validatable {
+struct PhoneRegisterRequest: Content, Validatable {
     var nickname: String
     var phone: String
     var captcha: String
@@ -17,7 +17,7 @@ struct PhoneRegisterRequest: Codable, Validatable {
     static func validations() throws -> Validations<PhoneRegisterRequest> {
         var validations = Validations(self)
         validations.add(\.phone, at: ["phone"], .phone)
-        validations.add(\.password, at: ["password"], .count(6...20))
+        validations.add(\.password, at: ["password"], .password)
         return validations
     }
 }
@@ -36,17 +36,19 @@ class RegisterController {
      *
      * @apiSuccess {User} -- 注册成功返回用户信息
      */
-    func phoneRegister(_ request: Request) throws -> Future<UserResp> {
+    func phoneRegister(_ request: Request) throws -> Future<LoginResponse> {
         
-        return try request.decode(PhoneRegisterRequest.self).flatMap({ (data, device) -> Future<UserResp> in
+        return try request.decode(PhoneRegisterRequest.self).flatMap({ reqData -> Future<LoginResponse> in
+            let data = reqData.data
+            let device = reqData.device!
             try data.validate()
-            return SMSController().verifyCaptcha(data.captcha, with: data.phone, on: request).flatMap({ (passed) -> EventLoopFuture<MySQLConnection> in
+            return SMSController().verifyCaptcha(data.captcha, with: data.phone, on: request).flatMap({ (passed) -> EventLoopFuture<[User]> in
                 if !passed {
                     throw Abort(.badRequest, reason: "验证码不正确。")
                 }
-                return request.newConnection(to: .mysql)
-            }).flatMap({ (connection) -> EventLoopFuture<[User]> in
-                return try connection.query(User.self).filter(\.phone == data.phone).all()
+                return request.newConnection(to: .mysql).flatMap({ (connection) -> EventLoopFuture<[User]> in
+                    return try connection.query(User.self).filter(\.phone == data.phone).all()
+                })
             }).flatMap({ (users) -> EventLoopFuture<User> in
                 if users.count > 0 {
                     throw Abort(.conflict, reason: "该手机号已注册。")
@@ -57,8 +59,10 @@ class RegisterController {
             }).flatMap({ (user) -> EventLoopFuture<User> in
                 let action = UserAction(userId: user.id ?? 0, actionType: .register, device: device, remark: "通过手机号`\(data.phone)`注册")
                 return action.save(on: request).transform(to: user)
-            }).map({ (user) -> (UserResp) in
-                return UserResp(from: user)
+            }).flatMap({ (user) -> Future<LoginResponse> in
+                return try TokenController().createToken(for: user, device: device, on: request).map({ (token) -> (LoginResponse) in
+                    return LoginResponse(user: user, token: token)
+                })
             })
         })
     }

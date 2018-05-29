@@ -27,22 +27,24 @@ class SMSController {
      * @apiParam {String} phone 接收短信的电话号码
      *
      * @apiSuccessExample 发送成功
-     *     HTTP/1.1 200 OK
-     *     {
-     *        "expireTime": 1527556443.0491471,  // 验证码过期时间
-     *        "avaliable": 10       // 验证码有效期，单位分钟
-     *     }
+     * HTTP/1.1 200 OK
+     * {
+     *    "expireTime": 1527556443.0491471,  // 验证码过期时间
+     *    "avaliable": 10       // 验证码有效期，单位分钟
+     * }
      */
     func postCaptcha(_ req: Request) throws -> Future<CaptchaResponse> {
         
-        return try req.decode(CaptchaRequest.self).flatMap({ (data, device) -> Future<CaptchaResponse> in
+        return try req.decode(CaptchaRequest.self).flatMap({ reqData -> Future<CaptchaResponse> in
+            let data = reqData.data
+            let device = reqData.device!
             try data.validate()
             let phone = data.phone
             // 查询是否已经存在刚发送的验证码
             return req.withNewConnection(to: .mysql) { (connection) -> Future<[CaptchaRecord]> in
                 return try connection.query(CaptchaRecord.self).group(.or, closure: { (builder) in
                     try builder.filter(\.phone == phone)
-                    try builder.filter(\.device == req.device?.uuid)
+                    try builder.filter(\.device == device.uuid)
                 }).all()
                 }.flatMap({ (records) -> Future<CaptchaResponse> in
                     // 可能存在多个验证码，逐一比对并删除已过期的记录

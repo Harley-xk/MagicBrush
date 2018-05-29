@@ -9,7 +9,14 @@ import Vapor
 import FluentMySQL
 
 /// 记录用户操作行为的日志表，只记录重要行为
-final class UserAction: MySQLModel {
+final class UserAction: MySQLModel, SoftDeletable {
+    
+    static var deletedAtKey: WritableKeyPath<UserAction, Date?> {
+        return \.deletedAt
+    }
+    
+    /// 软删除时间戳
+    var deletedAt: Date?
     
     var id: Int?
     
@@ -49,6 +56,5 @@ extension UserAction {
         
         case register  // 注册
         case login     // 登录
-        case captcha   // 请求验证码
     }
 }

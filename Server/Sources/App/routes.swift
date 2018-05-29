@@ -13,6 +13,9 @@ public func routes(_ router: Router) throws {
         
         let register = RegisterController()
         router.post("auth/mobile-register", use: register.phoneRegister)
+        
+        let login = LoginController()
+        router.post("auth/login", use: login.accountLogin)
     }
     
 

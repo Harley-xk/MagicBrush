@@ -24,7 +24,7 @@ func makeMigrations(_ migrations: inout MigrationConfig) {
     migrations.add(model: SocialAccount.self, database: .mysql)
     migrations.add(model: UserAction.self, database: .mysql)
     migrations.add(model: UserDevice.self, database: .mysql)
-    
+    migrations.add(model: Token.self, database: .mysql)
     migrations.add(model: CaptchaRecord.self, database: .mysql)
     
 //    /// Currently Todo Only

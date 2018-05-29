@@ -9,7 +9,15 @@ import Vapor
 import FluentMySQL
 
 /// 用户使用的设备，所要在所有请求头部携带设备信息
-struct UserDevice: MySQLModel {
+struct UserDevice: MySQLModel, SoftDeletable {
+    
+    static var deletedAtKey: WritableKeyPath<UserDevice, Date?> {
+        return \.deletedAt
+    }
+    
+    /// 软删除时间戳
+    var deletedAt: Date?
+    
     var id: Int?
     
     // 设备唯一编号

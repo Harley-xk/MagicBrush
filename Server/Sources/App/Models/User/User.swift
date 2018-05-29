@@ -10,7 +10,11 @@ import FluentMySQL
 import Crypto
 
 /// 用户表
-final class User: MySQLModel {
+final class User: MySQLModel, SoftDeletable {
+    
+    static var deletedAtKey: WritableKeyPath<User, Date?> {
+        return \.deletedAt
+    }
     
     // 用户 id
     var id: Int?
@@ -41,6 +45,9 @@ final class User: MySQLModel {
     
     // 用户状态，初始为 pending
     var status: Status = .pending
+    
+    // 软删除时间戳
+    var deletedAt: Date?
     
     /// 通过手机号创建用户，需要先验证手机号
     convenience init(phone: String, nickname: String, password: String) throws {

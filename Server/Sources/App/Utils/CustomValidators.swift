@@ -17,6 +17,26 @@ extension Validator where T == String {
     public static var phone: Validator<T> {
         return PhoneValidator().validator()
     }
+    
+    public static var password: Validator<T> {
+        return PasswordValidator().validator()
+    }
+}
+
+fileprivate class PasswordValidator: RegularExpressionValidator {
+    /// See `ValidatorType`.
+    public override var validatorReadable: String {
+        return "a valid password"
+    }
+    
+    /// Creates a new `EmailValidator`.
+    public init() {
+        super.init(regex: "^[0-9a-zA-Z!@#$%^&*._]{6,20}$")
+    }
+    
+    override var validatorErrorMessage: String {
+        return "密码必须为 6 到 20 位字母数字和标点符号"
+    }
 }
 
 /// Validates whether a string is a valid email address.
