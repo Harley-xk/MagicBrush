@@ -26,8 +26,8 @@ class RegisterController {
     
     /**
      * @api {post} auth/mobile-register 手机号注册
-     * @apiParam 使用手机号注册账号，需要在头部携带设备信息
      * @apiGroup Auth
+     * @apiDescription 使用手机号注册账号，需要在头部携带设备信息
      *
      * @apiParam {String} phone 手机号码
      * @apiParam {String} captha 验证码，通过`sms/captcha`接口获得
@@ -60,6 +60,6 @@ class RegisterController {
             }).map({ (user) -> (UserResp) in
                 return UserResp(from: user)
             })
-        })        
+        })
     }
 }

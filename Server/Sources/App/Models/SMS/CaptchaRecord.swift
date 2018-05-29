@@ -13,13 +13,13 @@ final class CaptchaRecord: MySQLModel {
     var phone: String
     var code: String
     var device: String
-    var expireTime: Date
+    var sendTime: Date
     
     init(phone: String, code: String, device: String) {
         self.phone = phone
         self.code = code
         self.device = device
-        self.expireTime = Date().addingTimeInterval(600)
+        self.sendTime = Date()
     }
 }
 

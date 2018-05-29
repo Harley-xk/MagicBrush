@@ -15,6 +15,7 @@ struct SMSResult: Codable {
     var ext: String?
     var fee: Double?
     var sid: String?
+    var captchaBody: CaptchaRecord?
 
     var succeed: Bool {
         return result == 0
