@@ -10,57 +10,98 @@ import Service
 import FluentMySQL
 
 extension Request {
-    var device: UserDevice? {
-        if let uuid = http.headers["x-device-uuid"].first,
-            let name = http.headers["x-device-name"].first,
-            let system = http.headers["x-device-system"].first,
-            let model = http.headers["x-device-model"].first
-        {
-            return UserDevice(id: nil, uuid: uuid, name: name, system: system, model: model)
-        }
-        return nil
+    
+    var mysqlConnection: Future<MySQLConnection> {
+        return newConnection(to: .mysql)
     }
     
-    func decode<D>(_ content: D.Type, maxSize: Int = 65_536, withDevice: Bool = true) throws -> Future<RequestData<D>> where D: Decodable {
-        var device = self.device
-        if withDevice && device == nil {
+    func decodeUser() throws -> Future<User> {
+        guard let t = http.headers["x-token"].first else {
+            throw Abort(.unauthorized, reason: "无效的 Token")
+        }
+        return mysqlConnection.flatMap { (connection) -> EventLoopFuture<[User]> in
+            try connection.query(Token.self).filter(\.value == t).all().flatMap({ (tokens) -> EventLoopFuture<[User]> in
+                guard let token = tokens.first else {
+                    throw Abort(.unauthorized, reason: "无效的 Token")
+                }
+                
+                // 判断 token 绑定的 device 与发起请求的 device 是否一致
+                guard let deviceUUID = self.http.headers["x-device"].first else {
+                    throw Abort(.badRequest, reason: "Missing device info.")
+                }
+                if deviceUUID != token.device {
+                    throw Abort(.unauthorized, reason: "无效的 Token")
+                }
+                
+                // 判断 Token 是否过期
+                let tokentime = Date().timeIntervalSince1970 - token.createTime.timeIntervalSince1970
+                if tokentime > Double(Token_Avaliable_Length) * 60 {
+                    throw Abort(.unauthorized, reason: "Token 已过期")
+                }
+                return try connection.query(User.self).filter(\.id == token.userId).all()
+            })
+            }.map { (users) -> (User) in
+                guard let user = users.first else {
+                    throw Abort(.unauthorized, reason: "无效的 Token")
+                }
+                return user
+        }
+    }
+    
+    func decodeDevice() throws -> UserDevice {
+        guard let deviceBody = http.headers["x-device"].first, let data = deviceBody.data(using: .utf8) else {
             throw Abort(.badRequest, reason: "Missing device info.")
+        }
+        return try JSONDecoder().decode(UserDevice.self, from: data)
+    }
+    
+    func updateDevice(_ device: UserDevice) throws -> Future<UserDevice> {
+        return mysqlConnection.flatMap { (db) -> EventLoopFuture<[UserDevice]> in
+            return try db.query(UserDevice.self).filter(\.uuid == device.uuid).all()
+            }.flatMap { (devices) -> EventLoopFuture<UserDevice> in
+                if let d = devices.first {
+                    // 更新已存在的设备信息
+                    device.id = d.id
+                }
+                return device.save(on: self)
+        }
+    }
+    
+    
+    func decode<D>(_ content: D.Type, updateDevice: Bool = false, authed: Bool = true) throws -> Future<RequestData<D>> where D: Decodable {
+        if !updateDevice, !authed {
+            return try self.content.decode(D.self).map({ (data) -> RequestData<D> in
+                return RequestData(data: data)
+            })
         }
         
-        return newConnection(to: .mysql).flatMap({ (db) -> EventLoopFuture<[UserDevice]> in
-            // 查询设备信息
-            try db.query(UserDevice.self).filter(\.uuid == device?.uuid).all()
-        }).flatMap { (devices) -> EventLoopFuture<UserDevice> in
-            if devices.count <= 0 {
-                // 保存设备信息
-                return device!.save(on: self)
-            } else {
-                // 更新已存在的设备信息
-                device!.id = devices.first!.id
-                return device!.update(on: self)
-            }
-            }.flatMap { (device) -> EventLoopFuture<RequestData<D>> in
-                return try self.content.decode(D.self).map({ (d) -> RequestData<D> in
-                    return RequestData(data: d, device: device)
+        return try self.content.decode(D.self).flatMap({ (data) -> Future<RequestData<D>> in
+            let requestData = RequestData(data: data)
+            var future: Future<RequestData<D>>?
+            if updateDevice {
+                let d = try self.decodeDevice()
+                future = try self.updateDevice(d).map({ (device) -> (RequestData<D>) in
+                    requestData.device = device
+                    return requestData
                 })
-        }
-    }
-}
-
-final class DeviceInfoMiddleware: Middleware, ServiceType {
-    
-    func respond(to request: Request, chainingTo next: Responder) throws -> EventLoopFuture<Response> {
-        guard let _ = request.device else {
-            throw Abort(.badRequest, reason: "Missing device info.")
-        }
-        return try next.respond(to: request)
-    }
-    
-    static func makeService(for worker: Container) throws -> DeviceInfoMiddleware {
-        return DeviceInfoMiddleware()
-    }
-    
-    static var serviceSupports: [Any.Type] {
-        return [self]
+            }
+            if authed {
+                let authFuture = try self.decodeUser().map({ (user) -> (RequestData<D>) in
+                    requestData.user = user
+                    return requestData
+                })
+                if let f = future {
+                    return authFuture.flatMap({ (data) -> EventLoopFuture<RequestData<D>> in
+                        return f
+                    })
+                } else {
+                    return authFuture
+                }
+            }
+            guard let f = future else {
+                throw Abort(.internalServerError)
+            }
+            return f
+        })
     }
 }

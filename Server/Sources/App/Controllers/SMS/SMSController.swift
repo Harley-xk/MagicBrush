@@ -35,13 +35,13 @@ class SMSController {
      */
     func postCaptcha(_ req: Request) throws -> Future<CaptchaResponse> {
         
-        return try req.decode(CaptchaRequest.self).flatMap({ reqData -> Future<CaptchaResponse> in
+        return try req.decode(CaptchaRequest.self, authed: false).flatMap({ reqData -> Future<CaptchaResponse> in
             let data = reqData.data
-            let device = reqData.device!
+            let device = try req.decodeDevice()
             try data.validate()
             let phone = data.phone
             // 查询是否已经存在刚发送的验证码
-            return req.withNewConnection(to: .mysql) { (connection) -> Future<[CaptchaRecord]> in
+            return req.mysqlConnection.flatMap { (connection) -> Future<[CaptchaRecord]> in
                 return try connection.query(CaptchaRecord.self).group(.or, closure: { (builder) in
                     try builder.filter(\.phone == phone)
                     try builder.filter(\.device == device.uuid)
@@ -63,7 +63,7 @@ class SMSController {
                             }
                         }
                     }
-                    return try self.sendCaptcha(to: phone, on: req).map({ (result) -> (CaptchaResponse) in
+                    return try self.sendCaptcha(to: phone, on: req, with: device).map({ (result) -> (CaptchaResponse) in
                         try result.abort()
                         let expireTime = (result.captchaBody?.sendTime ?? Date()).timeIntervalSince1970 + 600
                         let resp = CaptchaResponse(avaliable: 10, expireTime: expireTime)
@@ -74,7 +74,7 @@ class SMSController {
     }
     
     //向指定手机号发送短信验证码
-    func sendCaptcha(to phone: String, on req: Request) throws -> Future<SMSResult> {
+    func sendCaptcha(to phone: String, on req: Request, with device: UserDevice) throws -> Future<SMSResult> {
         let random = String.random()
         let captcha = GenerateCaptcha()
         return try req.client().post("https://yun.tim.qq.com/v5/tlssmssvr/sendsms?sdkappid=\(Tencent_SMS_App_ID)&random=\(random)", headers: HTTPHeaders(), beforeSend: { (req) in
@@ -87,7 +87,7 @@ class SMSController {
             var rest = result
             if rest.succeed {
                 print("\nCaptcha Send Successed! Code: \(captcha)\n")
-                let record = CaptchaRecord(phone: phone, code: captcha, device: req.device?.uuid ?? "Unknown Device")
+                let record = CaptchaRecord(phone: phone, code: captcha, device: device.uuid)
                 _ = record.save(on: req)
                 rest.captchaBody = record
             } else {
@@ -100,7 +100,7 @@ class SMSController {
     /// 校验手机号和验证码是否有效
     func verifyCaptcha(_ captcha: String, with phone: String, on request: Request) -> Future<Bool> {
         // 查询是否已经存在刚发送的验证码
-        return request.withNewConnection(to: .mysql) { (connection) -> EventLoopFuture<[CaptchaRecord]> in
+        return request.mysqlConnection.flatMap { (connection) -> EventLoopFuture<[CaptchaRecord]> in
             return try connection.query(CaptchaRecord.self).group(.and, closure: { (builder) in
                 try builder.filter(\.phone == phone)
                 try builder.filter(\.code == captcha)

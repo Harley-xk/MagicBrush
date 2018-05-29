@@ -9,7 +9,7 @@ import Vapor
 import FluentMySQL
 
 /// 用户使用的设备，所要在所有请求头部携带设备信息
-struct UserDevice: MySQLModel, SoftDeletable {
+final class UserDevice: MySQLModel, SoftDeletable {
     
     static var deletedAtKey: WritableKeyPath<UserDevice, Date?> {
         return \.deletedAt
@@ -24,13 +24,20 @@ struct UserDevice: MySQLModel, SoftDeletable {
     var uuid: String
     
     // 设备名称，用户自定义的设备名称
-    var name: String
+    var name: String?
     
     // 系统名称及版本号：e.g. iOS 12、Android 8.0、Windows 10...
-    var system: String
+    var system: String?
     
     // 设备型号, e.g. iPhone 6 plus、MI Mix 2S...
-    var model: String
+    var model: String?
+    
+    init(uuid: String, name: String?, system: String?, model: String?) {
+        self.uuid = uuid
+        self.name = name
+        self.system = system
+        self.model = model
+    }
 }
 
 extension UserDevice: Migration {}

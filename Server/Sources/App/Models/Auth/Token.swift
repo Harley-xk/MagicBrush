@@ -14,8 +14,8 @@ final class Token: MySQLModel {
     // 用户 ID
     var userId: User.ID
     
-    // 设备 ID，同一个 token 只能在一台设备上使用
-    var deviceId: UserDevice.ID
+    // 设备的 uuid，同一个 token 只能在一台设备上使用
+    var device: String
     
     // Token 值，随机字符串
     var value: String
@@ -35,7 +35,7 @@ final class Token: MySQLModel {
         }
         self.value = String.random(bytes: 32)
         self.userId = user.id!
-        self.deviceId = device.id!
+        self.device = device.uuid
         self.createTime = Date()
         self.updateTime = createTime
     }

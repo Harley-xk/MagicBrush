@@ -7,17 +7,14 @@ public func routes(_ router: Router) throws {
         return "Hello, world!"
     }
     
-    router.group(DeviceInfoMiddleware()) { (router) in
-        let sms = SMSController()
-        router.post("sms/captcha", use: sms.postCaptcha)
-        
-        let register = RegisterController()
-        router.post("auth/mobile-register", use: register.phoneRegister)
-        
-        let login = LoginController()
-        router.post("auth/login", use: login.accountLogin)
-    }
+    let sms = SMSController()
+    router.post("sms/captcha", use: sms.postCaptcha)
     
+    let register = RegisterController()
+    router.post("auth/mobile-register", use: register.phoneRegister)
+    
+    let login = LoginController()
+    router.post("auth/login", use: login.accountLogin)
 
     // Example of configuring a controller
     let todoController = TodoController()

@@ -37,7 +37,7 @@
 		B62FBFE220BCF0A9006C5D2C /* LoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B62FBFE120BCF0A9006C5D2C /* LoginController.swift */; };
 		B62FBFE520BD272E006C5D2C /* ModelUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = B62FBFE420BD272E006C5D2C /* ModelUtil.swift */; };
 		B6D22B1920B99DC900788DD0 /* DeviceInfoMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6D22B1820B99DC900788DD0 /* DeviceInfoMiddleware.swift */; };
-		B6D22B1B20B9C03000788DD0 /* CustomValidators.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6D22B1A20B9C02F00788DD0 /* CustomValidators.swift */; };
+		B6D22B1B20B9C03000788DD0 /* RequestExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6D22B1A20B9C02F00788DD0 /* RequestExtension.swift */; };
 		B6F1FF2B20B6F1B400950CAC /* Migration.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6F1FF2A20B6F1B400950CAC /* Migration.swift */; };
 		OBJ_1032 /* AppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_23 /* AppTests.swift */; };
 		OBJ_1034 /* App.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "MaLiang-Server::App::Product" /* App.framework */; };
@@ -4953,7 +4953,7 @@
 		B62FBFE120BCF0A9006C5D2C /* LoginController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginController.swift; sourceTree = "<group>"; };
 		B62FBFE420BD272E006C5D2C /* ModelUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelUtil.swift; sourceTree = "<group>"; };
 		B6D22B1820B99DC900788DD0 /* DeviceInfoMiddleware.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceInfoMiddleware.swift; sourceTree = "<group>"; };
-		B6D22B1A20B9C02F00788DD0 /* CustomValidators.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomValidators.swift; sourceTree = "<group>"; };
+		B6D22B1A20B9C02F00788DD0 /* RequestExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestExtension.swift; sourceTree = "<group>"; };
 		B6F1FF2A20B6F1B400950CAC /* Migration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Migration.swift; sourceTree = "<group>"; };
 		"Console::Command::Product" /* Command.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Command.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		"Console::Console::Product" /* Console.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Console.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -6566,7 +6566,6 @@
 			isa = PBXGroup;
 			children = (
 				B613FF7E20B805FE00FF0C1F /* Utils.swift */,
-				B6D22B1A20B9C02F00788DD0 /* CustomValidators.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -8757,6 +8756,7 @@
 		OBJ_9 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				B6D22B1A20B9C02F00788DD0 /* RequestExtension.swift */,
 				B613FF8020B94A7900FF0C1F /* SMS */,
 				B62C6D7E20B7A3EA00D570F3 /* Auth */,
 				OBJ_10 /* TodoController.swift */,
@@ -11503,7 +11503,7 @@
 				B62C6D8320B7A42F00D570F3 /* UserAction.swift in Sources */,
 				B613FF7A20B7F93800FF0C1F /* UserDevice.swift in Sources */,
 				B613FF7C20B803F200FF0C1F /* SMSController.swift in Sources */,
-				B6D22B1B20B9C03000788DD0 /* CustomValidators.swift in Sources */,
+				B6D22B1B20B9C03000788DD0 /* RequestExtension.swift in Sources */,
 				B613FF8220B94A8D00FF0C1F /* SMSResult.swift in Sources */,
 				OBJ_898 /* User.swift in Sources */,
 				OBJ_899 /* app.swift in Sources */,

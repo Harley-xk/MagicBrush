@@ -38,7 +38,7 @@ class RegisterController {
      */
     func phoneRegister(_ request: Request) throws -> Future<LoginResponse> {
         
-        return try request.decode(PhoneRegisterRequest.self).flatMap({ reqData -> Future<LoginResponse> in
+        return try request.decode(PhoneRegisterRequest.self, updateDevice: true, authed: false).flatMap({ reqData -> Future<LoginResponse> in
             let data = reqData.data
             let device = reqData.device!
             try data.validate()
@@ -46,7 +46,7 @@ class RegisterController {
                 if !passed {
                     throw Abort(.badRequest, reason: "验证码不正确。")
                 }
-                return request.newConnection(to: .mysql).flatMap({ (connection) -> EventLoopFuture<[User]> in
+                return request.mysqlConnection.flatMap({ (connection) -> EventLoopFuture<[User]> in
                     return try connection.query(User.self).filter(\.phone == data.phone).all()
                 })
             }).flatMap({ (users) -> EventLoopFuture<User> in

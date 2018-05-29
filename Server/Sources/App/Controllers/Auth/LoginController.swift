@@ -33,11 +33,11 @@ class LoginController {
      */
 
     func accountLogin(_ request: Request) throws -> Future<LoginResponse> {
-        return try request.decode(AccountLoginRequestData.self).flatMap { requestData -> EventLoopFuture<LoginResponse> in
+        return try request.decode(AccountLoginRequestData.self, updateDevice: true, authed: false).flatMap { requestData -> EventLoopFuture<LoginResponse> in
             let device = requestData.device!
             let data = requestData.data
             
-            return request.newConnection(to: .mysql).flatMap({ (db) -> EventLoopFuture<[User]> in
+            return request.mysqlConnection.flatMap({ (db) -> EventLoopFuture<[User]> in
                 return try db.query(User.self).group(.and, closure: { (builder) in
                     try builder.group(.or, closure: { (bd) in
                         try bd.filter(\.phone == data.account)
@@ -59,4 +59,8 @@ class LoginController {
             })
         }
     }
+    
+//    func updateToken(_ request: Request) throws -> Future<LoginResponse> {
+//        
+//    }
 }

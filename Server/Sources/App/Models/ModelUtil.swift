@@ -16,10 +16,10 @@ extension Encodable {
 
 final class RequestData<M: Content>: Content {
     var device: UserDevice?
+    var user: User?
     var data: M
     
-    init(data: M, device: UserDevice?) {
+    init(data: M) {
         self.data = data
-        self.device = device
     }
 }
